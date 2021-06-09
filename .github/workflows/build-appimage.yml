@@ -1,0 +1,25 @@
+name: build-appimage
+on: [push]
+jobs:
+  buildAppimage:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Python Setup
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: x64
+      - name: Install Packages (apt)
+        run: |
+          sudo apt update
+          sudo apt install python3-pyqt5 python3-lxml python3-enchant
+      - uses: actions/checkout@v2
+      - name: build-appimage
+        run: |
+          ./build_appimage.sh
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist
+          path: |
+            out/*AppImage
