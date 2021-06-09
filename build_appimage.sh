@@ -42,7 +42,7 @@ echo 'LAUNCHER="$(readlink -f "${0}")"' >> AppDir/usr/bin/novelwriter
 echo 'HERE="$(dirname "${LAUNCHER}")"' >> AppDir/usr/bin/novelwriter
 echo "echo \${LAUNCHER}" >> AppDir/usr/bin/novelwriter
 echo "echo \${HERE}" >> AppDir/usr/bin/novelwriter
-echo "exec PYTHONPATH=\${HERE}/../lib/python3 \${HERE}/python3 \${HERE}/../../opt/novelWriter/novelWriter.py" >> AppDir/usr/bin/novelwriter
+echo "exec (PYTHONPATH=\${HERE}/../lib/python3/dist-packages/ \${HERE}/python3 \${HERE}/../../opt/novelWriter/novelWriter.py)" >> AppDir/usr/bin/novelwriter
 chmod +x AppDir/usr/bin/novelwriter
 
 ## Copy libraries from host system (Github Actions Runner or local system) to AppDir
