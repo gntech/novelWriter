@@ -46,6 +46,7 @@ echo "exec (PYTHONPATH=\${HERE}/../lib/python3/dist-packages/ \${HERE}/python3 \
 chmod +x AppDir/usr/bin/novelwriter
 
 ## Copy libraries from host system (Github Actions Runner or local system) to AppDir
+cp -r /usr/lib/python3.6 AppDir/usr/lib/
 cp -r /usr/lib/python3/dist-packages/PyQt5 AppDir/usr/lib/python3/dist-packages
 cp -r /usr/lib/python3/dist-packages/enchant AppDir/usr/lib/python3/dist-packages
 cp -r /usr/lib/python3/dist-packages/lxml AppDir/usr/lib/python3/dist-packages
