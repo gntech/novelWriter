@@ -22,4 +22,4 @@ jobs:
         with:
           name: dist
           path: |
-            out/*AppImage
+            novelWriter*AppImage
