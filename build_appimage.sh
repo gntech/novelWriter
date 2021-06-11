@@ -1,17 +1,15 @@
 #!/bin/sh
 
+## This file builds an novelWriter AppImage from the current source.
+## It is run automatically by Github actions workflow.
+## The generated AppImage is uploaded as a Dist artifact.
+
 if [ -d "squashfs-root" ] 
 then
     rm -r squashfs-root
 fi
 
-rm -f *.zip
 rm -f *.AppImage
-
-#wget https://github.com/vkbo/novelWriter/releases/download/v1.3.2/novelWriter-1.3.2-minimal-linux.zip
-#VERSION=$(ls novelWriter-* | head -1 | awk -F"-" '{print $2}')
-#echo $VERSION > AppDir/VERSION
-#unzip novelWriter*.zip -d AppDir/opt/novelWriter
 
 # Download an AppImage of Python 3. built for manylinux
 wget https://github.com/niess/python-appimage/releases/download/python3.8/python3.8.10-cp38-cp38-manylinux1_x86_64.AppImage
@@ -21,9 +19,9 @@ chmod +x python*-manylinux1_x86_64.AppImage
 ./python*-manylinux1_x86_64.AppImage --appimage-extract
 
 # Install novelWriter into the extracted AppDir
-./squashfs-root/AppRun -m pip install novelWriter
+./squashfs-root/AppRun -m pip install --use-feature=in-tree-build .
 
-## Copy files from git-repo/Resources to squashfs-root
+# Copy icons to squashfs-root
 cp setup/icons/scaled/icon-novelwriter-16.png squashfs-root/usr/share/icons/hicolor/16x16/apps/novelwriter.png
 cp setup/icons/scaled/icon-novelwriter-32.png squashfs-root/usr/share/icons/hicolor/32x32/apps/novelwriter.png
 cp setup/icons/scaled/icon-novelwriter-64.png squashfs-root/usr/share/icons/hicolor/64x64/apps/novelwriter.png
@@ -32,12 +30,15 @@ cp setup/icons/scaled/icon-novelwriter-256.png squashfs-root/usr/share/icons/hic
 cp setup/icons/icon-novelwriter.svg squashfs-root/usr/share/icons/hicolor/scalable/apps/novelwriter.svg
 cp setup/icons/scaled/icon-novelwriter-256.png squashfs-root/novelwriter.png
 
+# Copy MIME type
+cp setup/mime/x-novelwriter-project.xml squashfs-root/usr/share/mime/packages/
+
 # Copy and Edit the desktop file
 cp setup/novelwriter.desktop squashfs-root/
 sed -i 's/%%exec%%/novelwriter/g' squashfs-root/novelwriter.desktop
 cp squashfs-root/novelwriter.desktop squashfs-root/usr/share/applications/novelwriter.desktop
 
-# Change AppRun so that it launches taguette
+# Change AppRun so that it launches novelWriter
 sed -i -e 's|/opt/python3.8/bin/python3.8|/usr/bin/novelWriter|g' ./squashfs-root/AppRun
 
 # Remove Python 3.8 desktop file
